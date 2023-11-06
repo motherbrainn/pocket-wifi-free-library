@@ -31,6 +31,13 @@ a:visited {
   color: #0077b6; /* Visited link color (same as unvisited) */
 }
 
+a:hover {
+  color: #013c5c;
+} /* Mouse over link */
+a:active {
+  color: #0000ff;
+} /* Selected link   */
+
 main {
   width: 80%;
   margin: 0 auto;
