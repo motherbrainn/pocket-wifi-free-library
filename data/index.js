@@ -20,4 +20,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Hide the loading overlay when the new page is fully loaded
     loadingOverlay.style.display = "none";
   };
+
+  // Handle the popstate event (when using the back/forward buttons)
+  window.addEventListener("popstate", function () {
+    // Hide the loading overlay when navigating back to a previous page
+    loadingOverlay.style.display = "none";
+  });
 });
