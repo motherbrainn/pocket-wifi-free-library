@@ -1,8 +1,14 @@
 let socket; // Declare socket variable globally
 let userId;
+let userColor; // Declare user color globally
 
 function generateRandomUserId() {
   return Math.random().toString(36).substr(2, 9); // Generate a random alphanumeric user ID
+}
+
+function generateRandomColor() {
+  // Generate a random color in hex format
+  return "#" + Math.floor(Math.random() * 16777215).toString(16);
 }
 
 function showLoadingOverlay() {
@@ -18,13 +24,19 @@ function hideLoadingOverlay() {
 function initWebSocket() {
   showLoadingOverlay(); // Show loading overlay when WebSocket is opening
   userId = generateRandomUserId(); // Generate a unique user ID
+  userColor = generateRandomColor(); // Generate a unique color for the user
   console.log("User ID:", userId);
+  console.log("User Color:", userColor);
 
   socket = new WebSocket("ws://192.168.4.1:81");
 
   socket.addEventListener("open", (event) => {
     console.log("WebSocket connection opened:", event);
     hideLoadingOverlay(); // Hide loading overlay when WebSocket is opened
+
+    // Send user information to the server
+    const userInfo = { type: "userInfo", userId, userColor };
+    socket.send(JSON.stringify(userInfo));
   });
 
   socket.addEventListener("message", (event) => {
@@ -47,11 +59,17 @@ function displayMessage(message) {
   const chatOutput = document.getElementById("chat-output");
   const messageObj = JSON.parse(message);
 
+  // Check if the message type is userInfo
+  if (messageObj.type === "userInfo") {
+    return; // Skip displaying userInfo messages
+  }
+
   const messageContainer = document.createElement("div");
   messageContainer.classList.add("message-container");
 
   const userIdElement = document.createElement("span");
   userIdElement.classList.add("user-id");
+  userIdElement.style.color = messageObj.userColor; // Set the user color from the message
   userIdElement.textContent = `User ${messageObj.userId}: `;
   messageContainer.appendChild(userIdElement);
 
@@ -67,11 +85,12 @@ function sendMessage() {
   const messageInput = document.getElementById("message-input");
   const message = messageInput.value.trim();
 
+  // Check if the message is not empty
   if (message !== "") {
     if (socket.readyState === WebSocket.OPEN) {
-      const messageWithUserId = { userId, message };
-      socket.send(JSON.stringify(messageWithUserId));
-      console.log("Message sent successfully:", messageWithUserId);
+      const messageWithUserInfo = { userId, userColor, message };
+      socket.send(JSON.stringify(messageWithUserInfo));
+      console.log("Message sent successfully:", messageWithUserInfo);
     } else {
       console.error("WebSocket not open. Unable to send message.");
     }

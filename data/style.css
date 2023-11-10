@@ -77,7 +77,7 @@ footer {
 
 /* New styles for the chat page */
 .chat-container {
-  background-color: #fff;
+  background-color: #f9f9f9;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   max-width: 600px;
@@ -95,8 +95,8 @@ footer {
 }
 
 #message-input {
-  width: 70%;
-  padding: 8px;
+  width: calc(100% - 20px);
+  padding: 10px;
   margin-right: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -104,6 +104,7 @@ footer {
 }
 
 button {
+  width: 20%;
   padding: 10px;
   background-color: #4caf50;
   color: #fff;
@@ -133,6 +134,7 @@ button:active {
 .message {
   color: #333;
 }
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
